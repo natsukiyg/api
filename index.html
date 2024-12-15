@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>タスク管理アプリ ver.2.0</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="api.css">
+</head>
+
+<body>
+    <!-- ログイン画面のヘッダー -->
+    <header>
+        <h1>タスク管理アプリ ver.2.0</h1>
+    </header>
+    
+    <!-- ログインボタン -->
+    <main>
+        <div class="login-container">
+            <button id="google-login-btn">
+                <img src="img/google_logo_icon_169090.webp" alt="Google Icon" class="google-icon"> Googleでログイン
+            </button>
+        </div>
+    </main>
+
+    <div class="container" id="container">
+        <!-- サイドバーを表示/非表示するボタン -->
+        <button id="toggle-sidebar">＞</button>
+
+        <!-- サイドバー -->
+        <div class="sidebar" id="sidebar">
+            <div class="task-container">
+                <!-- サイドバーにタスクリストを表示する -->
+                <div id="task-list-containter" class="task-list">
+                    <h2>タスクリスト</h2>
+                    <div id="task-items"></div>
+                </div>
+                <!-- タスク追加フォーム -->
+                <div id="task-form">
+                    <h3>タスクを追加</h3>
+                    <input type="text" id="task-name" placeholder="タスク名">
+                    <textarea id="task-description" placeholder="タスク詳細"></textarea>
+                    <input type="date" id="task-due-date">
+                    <input type="text" id="task-manager" placeholder="担当者">
+                    <button id="add-task">タスク追加</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 右側にメインコンテンツ表示 -->
+        <div id="main" class="main">
+            <div id="main-contents">
+                <!-- メインコンテンツでタスク詳細を表示する -->
+                <div id="task-detail-container" class="task-details">
+                    <div id="task-detail-content"></div>
+                </div>
+
+                <h2>chat</h2>
+                <!-- データ出力場所 -->
+                <ul id="chat-list"></ul>
+
+                <!-- 入力場所を作成-->
+                <form>
+                    <fieldset>
+                        <legend>チャット入力画面</legend>
+                        <div>
+                            name: <input type="text" id="chat-name">
+                        </div>
+                        <div>
+                            text: <input type="text" id="chat-input" placeholder="Type your message...">
+                        </div>
+                        <div>
+                            <button type="button" id="send-chat">send</button>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="footer-container">
+            <p>©️タスク管理アプリver.2.0</p>
+        </div>
+    </footer>
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script src="https://apis.google.com/js/client.js"></script>
+    <script type="module" src="api.js"></script>
+</body>
+
+</html>
