@@ -15,7 +15,7 @@ import {
     setDoc
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 //FirebaseAuth設定
-import { getAuth, signInWithCredential, GoogleAuthProvider ,signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+import { getAuth, GoogleAuthProvider ,signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
 
 //Firebase設定情報
 const firebaseConfig = {
@@ -32,7 +32,20 @@ const app = initializeApp(firebaseConfig);
 const provider = new GoogleAuthProvider();
 const auth = getAuth();
 //Googleカレンダーへのアクセス権限をリクエスト
-provider.addScope("https://www.googleapis.com/auth/calender");
+provider.addScope("https://www.googleapis.com/auth/calendar");
+
+//APIキーとクライエントIDの設定
+function initializeGapiClient() {
+    gapi.client.init({
+        apiKey: "",  // APIキー2
+        clientId: "157332041467-eb1kp7j75u19gq3ebdqk5as5qg9ftj18.apps.googleusercontent.com",  // 取得したクライアントID
+        scope: 'https://www.googleapis.com/auth/calendar.readonly',  // Google Calendarのスコープ
+    }).then(() => {
+        gapi.client.load('calendar', 'v3', () => {
+            console.log("Google Calendar APIが読み込まれました");
+        });
+    });
+}
 
 // DOMが読み込まれた後に実行（サイドバー）
 document.addEventListener("DOMContentLoaded", function() {
@@ -59,6 +72,70 @@ document.addEventListener("DOMContentLoaded", function() {
 // Firebase初期化
 //const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+
+// ページ読み込み時にカレンダーイベントを取得
+document.addEventListener('DOMContentLoaded', function() {
+    const idToken = localStorage.getItem('idToken'); // ログイン後、localStorageに保存されたidTokenを取得
+    console.log(idToken); //ここでidTokenが取得できているか確認
+
+    if (idToken) {
+        getGoogleCalendarData(idToken); // カレンダーイベントを取得
+    } else {
+        console.log("IDトークンが保存されていません。再ログインしてください。");
+    }
+});
+
+// Google Calendar APIを呼び出して、ユーザーのカレンダーイベントを取得
+function getGoogleCalendarData(idToken) {
+    console.log("IDトークンを送信:", idToken);
+    fetch('https://www.googleapis.com/calendar/v3/calendars/primary/events', {
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer' + idToken // BearerトークンとしてIDトークンを送信
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            console.error("エラーレスポンス:", response.status, response.statusText);
+            return Promise.reject("APIレスポンスエラー");
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log("取得したカレンダーイベント:", data);
+        //データが正しい場合にカレンダーイベントを表示
+        if (data.items && Array.isArray(data.items)) {
+            displayCalendarEvents(data.items); // 取得したイベントを画面に表示
+        } else {
+            console.log("カレンダーイベントが存在しません");
+        }        
+    })
+    .catch(error => {
+        console.error("Google Calendar APIエラー:", error);
+    });
+}
+
+// カレンダーイベントを画面に表示する関数
+function displayCalendarEvents(events) {
+    const calendarEventsList = document.getElementById('calendar-events-list');
+    calendarEventsList.innerHTML = ''; // 既存のイベントリストをクリア
+
+    if (events.length === 0) {
+        calendarEventsList.innerHTML = '<p>カレンダーにイベントはありません。</p>';
+    } else {
+        events.forEach(event => {
+            const eventItem = document.createElement('div');
+            eventItem.classList.add('event-item');
+            eventItem.innerHTML = `
+                <h4>${event.summary}</h4>
+                <p>開始: ${new Date(event.start.dateTime || event.start.date).toLocaleString()}</p>
+                <p>終了: ${new Date(event.end.dateTime || event.end.date).toLocaleString()}</p>
+            `;
+
+            calendarEventsList.appendChild(eventItem);
+        });
+    }
+}
 
 // 日時を見やすい形式に変換する関数
 function convertTimestampToDatetime(timestamp) {
@@ -395,7 +472,7 @@ onAuthStateChanged(auth, (user) => {
 });
 
 // ログアウト処理
-$("#out").on("click", function () {
+$("#logout").on("click", function () {
     signOut(auth).then(() => {
         alert("ログアウトしました");
         _redirect();

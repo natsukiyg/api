@@ -21,6 +21,7 @@ const app = initializeApp(firebaseConfig);
 // Google Auth認証
 const provider = new GoogleAuthProvider();
 const auth = getAuth();
+provider.addScope("https://www.googleapis.com/auth/calendar"); //Calendar APIのスコープを追加
 
 //ログインボタンのクリックイベント
 $("#google-login-btn").on("click", function () {
@@ -29,14 +30,43 @@ $("#google-login-btn").on("click", function () {
             //ユーザー情報取得
             const user = result.user;
             alert(`ようこそ、${user.displayName}さん！`);
-            //遷移先
-            location.href = "tasklist.html";
+
+            //IDトークンを取得
+            result.user.getIdToken().then((idToken) => {
+                localStorage.setItem("idToken", idToken); //idTokenをlocalStorageに保存
+                console.log("IDトークンを保存しました:", idToken);
+
+                //Google Calendar APIにアクセス
+                getGoogleCalendarData(idToken); //Google Calendarのデータを取得
+
+                //遷移先
+                location.href = "tasklist.html";
+            });
         })
         .catch((error) => {
             console.error("ログインエラー:", error);
             alert("ログインに失敗しました。再試行してください。");
         });
 });
+
+//Google Calender APIにアクセスする関数
+function getGoogleCalendarData(idToken) {
+    //IDトークンをAuthorizationヘッダーにセット
+    fetch("https://www.googleapis.com/calendar/v3/calendars/primary/events", {
+        method: "GET",
+        headers: {
+            "Authorization": "Bearer" + idToken //BearerトークンとしてIDトークンを送信
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Googleカレンダーのイベント:", data);
+            //必要な処理をここで行う
+        })
+        .catch(error => {
+            console.error("Google Calendar APIエラー:", error);
+        });
+}
 
 const db = getDatabase(app);
 

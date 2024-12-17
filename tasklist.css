@@ -41,7 +41,50 @@ header {
 #sidebar.open {
   width: 250px;  /* サイドバーが開いたときの幅 */
 }
-  
+
+/*ログインユーザーとログアウトボタンを横並びにする*/
+.user-logout-container {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.login-user {
+  display: flex;
+  flex-direction: column; /*アイコンと名前を縦に配置*/
+  align-items: center;
+}
+
+#prof {
+  margin-top: 10px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* ログアウトボタンのスタイル */
+#logout {
+  background-color: transparent;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+#logout-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px; /* アイコンとテキストの間にスペース */
+}
+
+/* ログアウトボタンのホバー時のスタイル */
+#logout:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
 /* タスクリストとフォームの初期スタイル */
 #task-list-container, #task-form {
   display: none; /*初期状態では隠す*/
@@ -72,7 +115,7 @@ header {
   z-index: 2000; /*ボタンがサイドバーより前に来るように設定*/
   transition: left 0.3s ease;/*ボタンがスムーズに移動する*/
 }
-  
+
 /* メインコンテンツ */
 #main {
   margin-left: 0;  /* 初期状態ではサイドバーがないため0 */

@@ -3,43 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>タスク管理アプリver.2.0</title>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <link rel="stylesheet" href="api.css">
 </head>
-<body>
-    <!-- ログイン画面のヘッダー -->
-    <header>
-        <h1>タスク管理アプリ ver.2.0</h1>
-    </header>
-        
-    <!-- ログインボタン -->
+<body>        
     <main>
+        <!--タイトルボックス-->
+        <div class="title-box">
+            <h1>タスク管理アプリ ver.2.0</h1>
+        </div>
+         <!-- ログインボタン -->
         <div class="login-container">
             <button id="google-login-btn">
-                <img src="img/google-logo-icon-mini.png" alt="Google Icon" class="google-icon"> Googleでログイン
+                <img src="img/google_logo_icon.png" alt="Google Icon" class="google-icon"> Googleでログイン
             </button>
         </div>
     </main>
-    <!-- コンテンツ表示画面 -->
     <div>
         <div>
             <img src="" id="prof">
             <span id="uname"></span><br>
-            
-        </div>
-        <div>
-            <select name="" id="title">
-                <option value="memo1">memo1</option>
-                <option value="memo2">memo2</option>
-                <option value="memo3">memo3</option>
-            </select>
-        </div>
-        <div>
-            <textarea id="text" cols="30" rows="10"></textarea>
-            <button id="send">Submit</button>
         </div>
     </div>
+    <footer>
+        <h2>©︎タスク管理アプリ ver.2.0</h2>
+    </footer>
     <script type="module" src="api.js"></script>
 </body>
 

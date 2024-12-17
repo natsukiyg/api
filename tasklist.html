@@ -17,11 +17,25 @@
 
         <!-- サイドバー -->
         <div class="sidebar" id="sidebar">
+            <!--ユーザーアイコンとログアウトボタン-->
+            <div class="user-logout-container">
+                <div class="login-user">
+                    <img src="" id="prof">
+                    <span id="uname"></span><br>
+                </div>
+                <button id="logout">
+                    <img src="img/logout.png" alt="logout" id="logout">
+                    <h1 id="status">Login...</h1>
+                </button>
+            </div>
             <div class="task-container">
                 <!-- サイドバーにタスクリストを表示する -->
                 <div id="task-list-containter" class="task-list">
                     <h2>タスクリスト</h2>
                     <div id="task-items"></div>
+                    <div id="calendar-events-list">
+                        <!--カレンダーのイベントがここtに表示される-->
+                    </div>
                 </div>
                 <!-- タスク追加フォーム -->
                 <div id="task-form">
@@ -32,12 +46,6 @@
                     <input type="text" id="task-manager" placeholder="担当者">
                     <button id="add-task">タスク追加</button>
                 </div>
-            </div>
-            <button id="out">ログアウト</button>
-            <h1 id="status">Login...</h1>
-            <div>
-                <span id="uname"></span><br>
-                <img src="" id="prof">
             </div>
         </div>
 
@@ -77,6 +85,7 @@
         </div>
     </footer>
     <script src="https://apis.google.com/js/api.js"></script>
+    <script src="https://apis.google.com/js/platform.js"></script>
     <script src="https://apis.google.com/js/client.js"></script>
     <script type="module" src="tasklist.js"></script>
 </body>

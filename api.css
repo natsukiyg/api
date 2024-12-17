@@ -1,0 +1,72 @@
+/* 背景画像の設定 */
+body {
+    background-image: url("img/brick.jpg"); /* 背景画像のパスを指定 */
+    background-size: cover; /* 画像を画面いっぱいに広げる */
+    background-position: center; /* 画像の中心を画面の中心に */
+    height: 100vh; /* 画面全体を使う */
+    margin: 0; /* デフォルトの余白を削除 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    color: white; /* 文字色を白に */
+    font-family: 'Arial', sans-serif;
+}
+
+/* タイトルボックスのスタイル */
+.title-box {
+    background-color: rgba(255, 255, 255,0.7); /* 背景を半透明の白に設定 */
+    padding: 20px 40px; /* ボックス内に余白を追加 */
+    border-radius: 10px; /* ボックスの角を丸くする */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* 軽いシャドウをつけて目立たせる */
+    margin-bottom: 20px; /*ログインボタンとの間に余白*/
+}
+
+/* タイトルの文字色を黒にして目立たせる */
+h1 {
+    color: black; /* 文字色を黒に */
+    font-size: 3.5em; /* 文字サイズを大きく */
+    margin: 0; /* 上下の余白をなくす */
+    font-weight: bold; /* 太字にして目立たせる */
+}
+
+/* ログインボタンのスタイル */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+/* ログインボタンのスタイル */
+#google-login-btn {
+    background-color: #4285F4; /* Googleの青色 */
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    max-width: 300px; /*ボタンの幅を制限*/
+    width: 100%;
+    box-sizing: border-box; /*ボタンの余白を含めた幅の設定*/
+}
+
+/* ホバー時のスタイル */
+#google-login-btn:hover {
+    background-color: #357AE8;
+}
+
+/* Googleアイコンのスタイル */
+.google-icon {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+}
