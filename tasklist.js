@@ -243,6 +243,12 @@ function deleteTask(taskId) {
         });
 }
 
+//送信処理を行う関数
+function handleSendChatClick() {
+    const taskId = document.getElementById("task-detail-content").getAttribute("data-task-id");
+    sendChatMessage(taskId);
+}
+
 // タスク詳細を右側に表示する
 function showTaskDetails(taskId) {
     console.log("Showing details for task", taskId); //デバッグ用ログ
@@ -275,11 +281,11 @@ function showTaskDetails(taskId) {
             //チャットメッセージを読み込む
             loadChatMessages(taskId);
 
-            //メッセージ送信ボタンのイベントリスナー
-            document.getElementById("send-chat").addEventListener("click", () => {
-                //                const taskId = document.getElementById("task-detail-content").getAttribute("data-task-id");
-                sendChatMessage(taskId);
-            });
+            //既存のイベントリスナーを削除して、重複を防ぐ
+            document.getElementById("send-chat").removeEventListener("click", sendChatMessage);
+
+            //メッセージ送信ボタンのイベントリスナーを新たに追加
+            document.getElementById("send-chat").addEventListener("click", handleSendChatClick);
         }
     }).catch((error) => {
         console.log("Error getting task details:", error);
@@ -289,7 +295,7 @@ function showTaskDetails(taskId) {
 //タスク詳細に紐づけられたチャットメッセージを読み込む
 function loadChatMessages(taskId) {
     const chatList = document.getElementById("chat-list");
-//    chatList.innerHTML = ""; //既存のチャットをクリア
+    chatList.innerHTML = ""; //既存のチャットをクリア
 
     //Firestoreからチャットメッセージをリアルタイムで取得(taskIdでフィルタリング)
     const messageRef = collection(db, "tasks", taskId, "messages");
@@ -297,6 +303,7 @@ function loadChatMessages(taskId) {
     
     //onSnapshotを使用してリアルタイムにデータを取得
     onSnapshot(q, (querySnapshot) => {
+        console.log(querySnapshot);
         //新しいメッセージを追加する前に、重複しないように既存のメッセージをクリアしない
         querySnapshot.docChanges().forEach((change) => {
             if (change.type === "added") { //新しく追加されたメッセージのみを追加する
@@ -324,6 +331,9 @@ function loadChatMessages(taskId) {
 
 //チャットメッセージを送信する
 function sendChatMessage(taskId) {
+    console.log("Sending message..."); //関数が呼ばれた回数を確認
+    const sendButton = document.getElementById("send-button");
+
     const messageText = document.getElementById("chat-input").value;
     const userName = document.getElementById("chat-name").value; //名前を取得
 
@@ -331,6 +341,8 @@ function sendChatMessage(taskId) {
         alert("名前とメッセージを入力してください！");
         return;
     }
+
+    console.log("Sending message to taskId:", taskId); //taskId確認用ログ
 
     const messageData = {
         name: userName,
@@ -369,7 +381,8 @@ onSnapshot(tasksRef, (querySnapshot) => {
 
         //削除ボタンのクリックイベント
         deleteButton.addEventListener("click", (event) => {
-            event.stopPropagation(); //クリックした時に親要素のクリックイベントを止める            deleteTask(doc.id); //クリックしたタスクを削除
+            event.stopPropagation(); //クリックした時に親要素のクリックイベントを止める            
+            deleteTask(doc.id); //クリックしたタスクを削除
         });
 
         //タスクリストをクリックするとクリックしたタスクが右側に表示されるか確認
@@ -378,14 +391,12 @@ onSnapshot(tasksRef, (querySnapshot) => {
             showTaskDetails(taskId);
         });
 
-        //タスクアイテムに削除ボタンを追加
-        //        taskItem.appendChild(deleteButton);
-
-        //タスクリストにタスクアイテムを追加
-        //        taskListElement.appendChild(taskItem);
-        //    });
+        //タスクリストでタスクを選択した時にそのタスクIDを渡す
+        function onTaskSelect(taskId) {
+            console.log("Selected taskId:", taskId);
+            loadChatMessages(taskId); //メッセージをそのタスクIDで表示
+        }
     });
-
 
     // Firestoreからデータを配列形式に変換する関数
     function chatDocuments(fireStoreDocs) {
